@@ -34,7 +34,7 @@ func TestGetAllArticles(t *testing.T) {
 func TestShowIndexPageUnauthenticated(t *testing.T) {
   r := getRouter(true)
 
-  r.GET("/", ShowIndexPage)
+  r.GET("/", showIndexPage)
 
   // Create a request to send to the above route
   req, _ := http.NewRequest("GET", "/", nil)

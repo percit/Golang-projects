@@ -16,7 +16,7 @@ func main() {
   router.LoadHTMLGlob("templates/*")
 
    // Handle Index
-   router.GET("/", ShowIndexPage) //this is showing all articles on localhost
+   router.GET("/", showIndexPage) //this is showing all articles on localhost "http://localhost:8080/"
    router.GET("/article/view/:article_id", getArticle) //this will show only one article
    //to drugie wymaga http://localhost:8080/article/view/1
 
@@ -26,6 +26,13 @@ func main() {
 }
 
 //zeby to odpalic to musisz dac "go build -o app" i "./app", zwykle go run main.go nie dziala, chyba dlatego, ze nie jest podzielone na foldery
+//zeby odpalic testy daj "go test -v"
+
+
+
+
+
+
 
 //OLD VERSION
 

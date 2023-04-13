@@ -25,6 +25,7 @@ func main() {
 
 }
 
+
 //zeby to odpalic to musisz dac "go build -o app" i "./app", zwykle go run main.go nie dziala, chyba dlatego, ze nie jest podzielone na foldery
 //zeby odpalic testy daj "go test -v"
 

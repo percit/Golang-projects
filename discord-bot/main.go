@@ -24,12 +24,15 @@ func main() {
 		fmt.Println("Error creating Discord session: ", err)
 		return
 	}
+// BOT LOGIC ###################################################################
 
-	// Register the messageCreate func as a callback for MessageCreate events.
+
 	dg.AddHandler(helloWorldTest)
+	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildVoiceStates
 
-	// In this example, we only care about receiving message events.
-	dg.Identify.Intents = discordgo.IntentsGuildMessages
+
+
+//###################################################################
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
@@ -45,18 +48,17 @@ func main() {
 	<-sc
 
 	defer dg.Close()
-
-	// BOT LOGIC ###################################################################
-
 }
 
 func helloWorldTest(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return // Ignore all messages created by the bot itself
 	}
-	if m.Content == "!hello" {
-		s.ChannelMessageSend(m.ChannelID, "Hello, world!")
+	if m.Content == "!test" {
+		s.ChannelMessageSend(m.ChannelID, "hello1")
 	}
-	s.ChannelMessageSend(m.ChannelID, "Hello World!")
-	s.ChannelMessageSend(m.ChannelID, m.Content)
+	if m.Content == "" {
+		s.ChannelMessageSend(m.ChannelID, "Blad, content pusty")
+	}
+	s.ChannelMessageSend(m.ChannelID, string(m.Content))//"!test costam" gives "!test costam"
 }

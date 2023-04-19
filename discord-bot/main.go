@@ -6,34 +6,25 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"net/http"
+	"strings"
 	"encoding/json"
-	"time"
+	"net/http"
+	"bytes"
+
+	"discord-bot/weatherApi"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 var Token string
 var WeatherApiKey string
-const openWeatherMapURL = "http://api.openweathermap.org/data/2.5/weather"
+var ChatGPTAPIKey string
 
-type OpenWeatherMapResponse struct {
-	Name      string `json:"name"`
-	Main      Main   `json:"main"`
-	Weather   []Weather `json:"weather"`
-	Timestamp int64     `json:"dt"`
-}
 
-type Main struct {
-	Temperature float64 `json:"temp"`
-}
-
-type Weather struct {
-	Description string `json:"description"`
-}
 func init() {
 	flag.StringVar(&Token, "t", "", "Bot Token") //./discord-bot -t BOT_TOKEN
 	flag.StringVar(&WeatherApiKey, "w", "", "Weather api key") //./discord-bot -t BOT_TOKEN -d WEATHER-API-KEY
+	flag.StringVar(&ChatGPTAPIKey, "c", "", "ChatGPT api key") //./discord-bot -t BOT_TOKEN -d WEATHER-API-KEY -c CHAT-GPT-KEY
 	flag.Parse()
 }
 
@@ -49,8 +40,7 @@ func main() {
 	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentsGuildVoiceStates
 //###################################################################
 
-	// Open a websocket connection to Discord and begin listening.
-	err = dg.Open()
+	err = dg.Open()// Open a websocket connection to Discord and begin listening.
 	if err != nil {
 		fmt.Println("Error opening Discord session: ", err)
 		return
@@ -73,16 +63,24 @@ func parseCommands(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "hello1")
 	} else if m.Content == "!weather" {
 		s.ChannelMessageSend(m.ChannelID, getWeatherData())
-	}
-	if m.Content == "" {
+	} else if m.Content == "" {
 		s.ChannelMessageSend(m.ChannelID, "Error, no content")
 	}
-	// s.ChannelMessageSend(m.ChannelID, string(m.Content))
+	if strings.HasPrefix(m.Content, "!") {
+		parts := strings.SplitN(m.Content[1:], " ", 2)
+		if len(parts) == 2 {
+			command := "!" + parts[0]
+			message := parts[1]
+			if command == "!chatGPT" {
+				s.ChannelMessageSend(m.ChannelID, getChatGPTResponse(message))//not working, probably openAI api has some problem
+			}
+		}
+	}
 }
 func getWeatherData() string {
-	city := "New York"
+	city := "Wrocław"
 
-	weather, err := GetWeather(city, WeatherApiKey)
+	weather, err := weatherApi.GetWeather(city, WeatherApiKey)
 	if err != nil {
 		fmt.Println("Error getting weather:", err)
 		return "Error getting weather" + err.Error()
@@ -90,43 +88,37 @@ func getWeatherData() string {
 	return weather
 }
 
-//HELPER FUNCTIONS
-
-func GetWeather(city string, apiKey string) (string, error) {
-	url := fmt.Sprintf("%s?q=%s&appid=%s&units=metric", openWeatherMapURL, city, apiKey)
-
-	client := http.Client{
-		Timeout: time.Second * 10,
+func getChatGPTResponse(parsedInput string) string {
+	payload := map[string]string{
+		"text": parsedInput,
 	}
-
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	payloadBytes, err := json.Marshal(payload)
 	if err != nil {
-		return "", fmt.Errorf("failed to create request: %w", err)
+		panic(err)
 	}
-
-	resp, err := client.Do(req)
+	resp, err := http.Post("https://api.openai.com/v1/engine/"+ChatGPTAPIKey+"/completions", "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil {
-		return "", fmt.Errorf("failed to execute request: %w", err)
+		panic(err)
 	}
-
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("received non-200 status code: %d", resp.StatusCode)
+	var response map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&response)
+	if err != nil {
+		panic(err)
 	}
 
-	var openWeatherMapResponse OpenWeatherMapResponse
-
-	if err := json.NewDecoder(resp.Body).Decode(&openWeatherMapResponse); err != nil {
-		return "", fmt.Errorf("failed to decode response: %w", err)
+	choices, ok := response["choices"].([]interface{})
+	if !ok || len(choices) == 0 {
+		fmt.Println( "the case where choices is missing or empty")
+		return ""
 	}
 
-	weather := openWeatherMapResponse.Weather[0].Description
-	temperature := fmt.Sprintf("%.1f", openWeatherMapResponse.Main.Temperature)
-	cityName := openWeatherMapResponse.Name
+	choice := choices[0].(map[string]interface{})
+	text, ok := choice["text"].(string)
+	if !ok {
+		fmt.Println( "handle the case where text is missing or not a string")
+		return ""
+	}
 
-	return fmt.Sprintf("Current weather in %s: %s, Temperature: %s℃", cityName, weather, temperature), nil
-}
-
-
-//todo przenies rzeczy do paczki package weather jak zacznie dzialac
+	return text
+} 

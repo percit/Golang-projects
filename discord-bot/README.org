@@ -2,7 +2,7 @@
 
 
 
-** Useage: ./discord-bot -t YOUR_BOT_TOKEN
+** Useage: ./discord-bot -t YOUR_BOT_TOKEN -w WEATHER_API_KEY
 
 
 ** Adding bot: Discord bots => OAuth2 =>URL generator => paste this url into browser and add bot to discord

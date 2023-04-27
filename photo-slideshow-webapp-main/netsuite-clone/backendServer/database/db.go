@@ -1,11 +1,31 @@
 package database
+import (
+	"fmt"
+)
 
-//tworzenie bazy danych
 
-//najpierw moze zrob te wszystkie funkcje, ale niech bierze info z jakiegos kontenerka
-//potem jak wszystko zacznie dzialac, aka routes itd, to podmien pod baze danych
+//when everything works with routes, add mongoDB here
 
-//instancja bazy danych
-//funkcja inicjalizujaca baze danych, aka otworz baze danych, create table
-//add/delete value i data w argumencie
-//get value z data w argumencie
+type DB struct {
+	database map[string]int//database that will take date as string, and number of hours
+}
+
+func initDB() {
+	db := DB{database: make(map[string]int)}
+	db.database["24.04.2023"] = 8
+	db.database["25.04.2023"] = 8
+	db.database["26.04.2023"] = 8
+	db.database["27.04.2023"] = 8
+}
+
+func (db *DB) getHoursByDate(date string) int {
+	return db.database[date]
+}
+
+func (db *DB) setHoursByDate(date string) int {
+	return db.database[date]
+}
+
+func (db *DB) deleteDate(date string) {
+	delete(db.database, date)
+}

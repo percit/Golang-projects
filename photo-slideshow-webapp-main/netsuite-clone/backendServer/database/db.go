@@ -1,18 +1,45 @@
 package database
 import (
-	"fmt"
+	"log"
+	"context"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 
-//when everything works with routes, add mongoDB here
-//https://github.com/anthdm/catfacter/blob/master/main.go
-//tu powyzej jest przyklad wlasnie mongoDB
+const connectionString = ""
+const dbName = "netsuite"
+const collectionName = "hours"
 
+//most important
+var collection *mongo.Collection //grouping of mongodb documents(mongodb stores data as documents ->bson documents)
+
+
+
+//########################################################################################
+//########################################################################################
+//########################################################################################
 type DB struct {
 	database map[string]int//database that will take date as string, and number of hours
 }
 
 func (db *DB) InitDB() {
+	clientOption := options.Client().ApplyURI(connectionString)
+	//if we connect, we always have to pass context 
+	client, err := mongo.Connect(context.TODO(), clientOption)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("mongoDB connection success")
+	collection = client.Database(dbName).Collection(collectionName)
+	//collection instance
+	log.Println("collection instance is ready")
+
+
+
+
 	db.database = make(map[string]int)
 	db.database["24.04.2023"] = 8
 	db.database["25.04.2023"] = 8
@@ -21,16 +48,16 @@ func (db *DB) InitDB() {
 }
 
 func (db *DB) GetHoursByDate(date string) int {
-	fmt.Println("getHoursByDate")
+	log.Println("getHoursByDate")
 	return db.database[date]
 }
 
 func (db *DB) SetHoursByDate(date string, time int) {
-	fmt.Println("setHoursByDate")
+	log.Println("setHoursByDate")
 	db.database[date] = time
 }
 
-func (db *DB) deleteDate(date string) {
-	fmt.Println("deleteDate")
+func (db *DB) DeleteDate(date string) {
+	log.Println("deleteDate")
 	delete(db.database, date)
 }

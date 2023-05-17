@@ -5,9 +5,9 @@ import (
 )
 
 
-type Hours struct {
-	ID primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	WorkerName string `json: "workerName, omitempty"` //rething this, maybe add new argument "worker" for every function
-	Date string `json: "date, omitempty"`
-	Hours int `json: "hours, omitempty"`
+type User struct {
+	ID primitive.ObjectID `bson:"_id,omitempty"`
+	WorkerName string `bson:"workerName,omitempty"`
+	Date string `bson:"date,omitempty"`
+	Hours int `bson:"hours,omitempty"`
 }

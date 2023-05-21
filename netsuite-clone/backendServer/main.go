@@ -51,15 +51,16 @@ func main() {
 
 	// fmt.Println(db.FindUser("John Kowalski"))
 
-	db.DeleteOneRecord(user1.ID)
+	// db.DeleteOneRecord("646a5c795ef8c8ac407e72c8")
 
 	// db.DeleteAllRecords()
-
-	db.CloseConnection()
 
 	fmt.Println(user1)
 	fmt.Println(user2)
 	fmt.Println(user3)
+
+	db.CloseConnection()
+
 
 
 

@@ -98,9 +98,9 @@ func (db *DB) GetAllRecords() []*model.User {
 	return users
 }
 
-func (db *DB) DeleteOneRecord(userID primitive.ObjectID) {
-	// id, _ := primitive.ObjectIDFromHex(userID)
-	filter := bson.M{"_id": userID}
+func (db *DB) DeleteOneRecord(userID string) { //primitive.ObjectID
+	id, _ := primitive.ObjectIDFromHex(userID) 
+	filter := bson.M{"_id": id}
 	deleteCount, err := db.collection.DeleteOne(context.Background(),filter)
 
 	if err != nil {

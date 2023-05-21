@@ -44,14 +44,14 @@ func main() {
 		Hours: 0}	
 
 	// db.InsertUser(user1)
-	db.InsertUser(user2)
+	// db.InsertUser(user2)
 	// db.InsertUser(user3)
 
-	db.UpdateOneRecord(5, user2.ID) //idk it this works
+	// db.UpdateOneRecord(5, user2.ID)
 
-	// db.FindUser("John Kowalski") //idk it this works
+	// fmt.Println(db.FindUser("John Kowalski"))
 
-	// db.DeleteOneRecord(user1.ID)
+	db.DeleteOneRecord(user1.ID)
 
 	// db.DeleteAllRecords()
 

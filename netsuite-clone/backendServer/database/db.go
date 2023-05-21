@@ -71,7 +71,7 @@ func (db *DB) UpdateOneRecord(hours int, userID primitive.ObjectID) {
 }
 
 func (db *DB) FindUser(userName string) model.User {
-	filter := bson.M{"WorkerName": userName}
+	filter := bson.M{"workerName": userName}
 	var result model.User
 	err := db.collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {

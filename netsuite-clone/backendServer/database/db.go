@@ -61,7 +61,7 @@ func (db *DB) InsertUser(model model.User) {
 func (db *DB) UpdateOneRecord(hours int, userID primitive.ObjectID) {
 	// id, _ := primitive.ObjectIDFromHex(userID)
 	filter := bson.M{"_id": userID}
-	update := bson.M{"$set": bson.M{"Hours":hours}}//TODO check if this works
+	update := bson.M{"$set": bson.M{"hours":hours}}//TODO check if this works
 
 	result, err := db.collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {

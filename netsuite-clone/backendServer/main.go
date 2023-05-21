@@ -4,9 +4,11 @@ import (
 	// "log"
 	// "context"
 	"flag"
+	"fmt"
 
 	"backendServer/database"
 	"backendServer/database/model"
+
 	// "backendServer/server"
 
 	// "github.com/gin-gonic/gin"
@@ -41,11 +43,11 @@ func main() {
 		Date: "24.05.2022",
 		Hours: 0}	
 
-	db.InsertUser(user1)
+	// db.InsertUser(user1)
 	db.InsertUser(user2)
-	db.InsertUser(user3)
+	// db.InsertUser(user3)
 
-	// db.UpdateOneRecord(5, user2.ID) //idk it this works
+	db.UpdateOneRecord(5, user2.ID) //idk it this works
 
 	// db.FindUser("John Kowalski") //idk it this works
 
@@ -54,6 +56,10 @@ func main() {
 	// db.DeleteAllRecords()
 
 	db.CloseConnection()
+
+	fmt.Println(user1)
+	fmt.Println(user2)
+	fmt.Println(user3)
 
 
 

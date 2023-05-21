@@ -45,13 +45,13 @@ func main() {
 	db.InsertUser(user2)
 	db.InsertUser(user3)
 
-	db.UpdateOneRecord(5, user2.ID) //idk it this works
+	// db.UpdateOneRecord(5, user2.ID) //idk it this works
 
-	db.FindUser("John Kowalski") //idk it this works
+	// db.FindUser("John Kowalski") //idk it this works
 
-	db.DeleteOneRecord(user1.ID)
+	// db.DeleteOneRecord(user1.ID)
 
-	db.DeleteAllRecords()
+	// db.DeleteAllRecords()
 
 	db.CloseConnection()
 

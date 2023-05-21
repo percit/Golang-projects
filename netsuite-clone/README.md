@@ -1,8 +1,7 @@
-aplikacja golang, zrobiona jako client server, bedzie baza danych, gdzie podajesz date, ktora jest stringiem i jest KEY do bazy danych i ilosc godzin przepracowanych, frontend zrob jakis prosty z react
+# Netsuite like app that takes workerName, date and hours worked and puts into mongoDB collection
 
+## What works as of now:
+- backend server, to run it simply us `go build -o backendServer` and  `./backendServer -m <mongoDB_key>
 
-TODO:
-- testy wszystkich funkcji z database na mongoDB
-- wymyslenie jak przekazywac w api dane do post, put
-- stworzenie frontendu do dodawania tych wszystkich wartosci
-- dodawanie loginow i session
+## What I intend to add:
+- client with some frontend

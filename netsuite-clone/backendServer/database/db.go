@@ -17,7 +17,7 @@ const collectionName = "users"
 var mongoClient *mongo.Client
 
 type DB struct {
-	collection *mongo.Collection //grouping of mongodb documents(mongodb stores data as documents ->bson documents)
+	collection *mongo.Collection
 }
 
 func (db *DB) InitDB(connectionString string) {
@@ -58,10 +58,10 @@ func (db *DB) InsertUser(model model.User) {
 	log.Println("inserted 1 model with id", insertedId.InsertedID)
 }
 
-func (db *DB) UpdateOneRecord(hours int, userID primitive.ObjectID) {
-	// id, _ := primitive.ObjectIDFromHex(userID)
-	filter := bson.M{"_id": userID}
-	update := bson.M{"$set": bson.M{"Hours":hours}}//TODO check if this works
+func (db *DB) UpdateOneRecord(hours int, userID string) {
+	id, _ := primitive.ObjectIDFromHex(userID)
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"hours":hours}}
 
 	result, err := db.collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
@@ -71,7 +71,7 @@ func (db *DB) UpdateOneRecord(hours int, userID primitive.ObjectID) {
 }
 
 func (db *DB) FindUser(userName string) model.User {
-	filter := bson.M{"WorkerName": userName}
+	filter := bson.M{"workerName": userName}
 	var result model.User
 	err := db.collection.FindOne(context.TODO(), filter).Decode(&result)
 	if err != nil {
@@ -98,9 +98,9 @@ func (db *DB) GetAllRecords() []*model.User {
 	return users
 }
 
-func (db *DB) DeleteOneRecord(userID primitive.ObjectID) {
-	// id, _ := primitive.ObjectIDFromHex(userID)
-	filter := bson.M{"_id": userID}
+func (db *DB) DeleteOneRecord(userID string) {
+	id, _ := primitive.ObjectIDFromHex(userID) 
+	filter := bson.M{"_id": id}
 	deleteCount, err := db.collection.DeleteOne(context.Background(),filter)
 
 	if err != nil {

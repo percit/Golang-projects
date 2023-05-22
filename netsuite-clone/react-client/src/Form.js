@@ -5,9 +5,11 @@ function Form() {
   const [field1, setField1] = useState('');
   const [field2, setField2] = useState('');
   const [field3, setField3] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setSubmitted(true);
     console.log(field1, field2, field3);
   };
 
@@ -43,6 +45,14 @@ function Form() {
         </div>
         <button type="submit">Submit</button>
       </form>
+      {submitted && (
+        <div>
+          <h4>Submitted Values:</h4>
+          <p>Field 1: {field1}</p>
+          <p>Field 2: {field2}</p>
+          <p>Field 3: {field3}</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,3 +5,7 @@
 
 ## What I intend to add:
 - client with some frontend
+
+## Svelte client:
+- `npx create-react-app svelte-client` to create app
+- `npm run dev` to run the app

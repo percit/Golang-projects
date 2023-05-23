@@ -1,58 +1,83 @@
 import React, { useState } from 'react';
-import './Form.css'; // Import the CSS file for styling
+import './Form.css';
 
 function Form() {
-  const [field1, setField1] = useState('');
-  const [field2, setField2] = useState('');
-  const [field3, setField3] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    workerName: '',
+    date: '',
+    hours: ''
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setSubmitted(true);
-    console.log(field1, field2, field3);
+
+    const urlEncodedData = new URLSearchParams();
+    for (const key in formData) {
+      urlEncodedData.append(key, formData[key]);
+    }
+    fetch('http://localhost:8080/api/InsertRecord', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: urlEncodedData.toString()
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    });
   };
 
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit}>
         <div className="form-field">
-          <label htmlFor="field1">Field 1:</label>
+          <label htmlFor="workerName">WorkerName:</label>
           <input
             type="text"
-            id="field1"
-            value={field1}
-            onChange={(event) => setField1(event.target.value)}
+            id="workerName"
+            name="workerName"
+            value={formData.workerName}
+            onChange={handleChange}
           />
         </div>
         <div className="form-field">
-          <label htmlFor="field2">Field 2:</label>
+          <label htmlFor="date">Date:</label>
           <input
             type="text"
-            id="field2"
-            value={field2}
-            onChange={(event) => setField2(event.target.value)}
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
           />
         </div>
         <div className="form-field">
-          <label htmlFor="field3">Field 3:</label>
+          <label htmlFor="hours">Hours:</label>
           <input
             type="text"
-            id="field3"
-            value={field3}
-            onChange={(event) => setField3(event.target.value)}
+            id="hours"
+            name="hours"
+            value={formData.hours}
+            onChange={handleChange}
           />
         </div>
         <button type="submit">Submit</button>
       </form>
-      {submitted && (
-        <div>
-          <h4>Submitted Values:</h4>
-          <p>Field 1: {field1}</p>
-          <p>Field 2: {field2}</p>
-          <p>Field 3: {field3}</p>
-        </div>
-      )}
     </div>
   );
 }

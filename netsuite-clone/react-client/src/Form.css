@@ -1,0 +1,40 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+  
+.form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+input {
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    border: 1px solid #ccc;
+}
+
+.submit-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    background-color: #f39c12;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 47.5%;
+}

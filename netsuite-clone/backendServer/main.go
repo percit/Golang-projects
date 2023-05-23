@@ -14,6 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/errgroup"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/gin-contrib/cors"
 )
 
 var MongoKey string
@@ -74,12 +75,19 @@ func main() {
 	r := gin.Default()
 	r.GET("/ping", routes.Ping) //works
 	r.GET("/api/GetAllRecords", routes.GetAllRecords)//works
-	r.POST("/api/InsertRecord", routes.InsertRecord) //works (this needs to be in Form, not Json Payload)
+	r.POST("/api/InsertRecord", routes.InsertRecord) //works (but this needs to be in Form, not Json Payload)
 	r.PUT("/api/UpdateOneRecord/:id", routes.UpdateOneRecord) //works
 	r.DELETE("/api/DeleteOneRecord/:id", routes.DeleteOneRecord)//works
 	r.DELETE("/api/DeleteAllRecords", routes.DeleteAllRecords) //works
 
 	errs, _ := errgroup.WithContext(context.Background())
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
+		AllowCredentials: true,
+	}))
 
 	errs.Go(func() error {
 		err := r.Run()

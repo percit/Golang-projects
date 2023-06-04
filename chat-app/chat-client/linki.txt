@@ -1,0 +1,6 @@
+https://github.com/TannerGabriel/learning-go/blob/master/advanced-programs/WebsocketsChat/public/main.js
+https://www.freecodecamp.org/news/how-to-build-a-react-js-chat-app-in-10-minutes-c9233794642b
+https://www.youtube.com/watch?v=a-JKj7m2LIo
+https://www.youtube.com/watch?v=zQyrwxMPm88
+https://www.youtube.com/watch?v=k4mjF4sPITE
+https://www.youtube.com/watch?v=Fzv-rgwcFKk

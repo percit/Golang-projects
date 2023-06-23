@@ -1,3 +1,13 @@
+Main plan:
+
+1 sending messages with a sender's nick
+- opening a websocket connection
+2 showing all messages as printing
+
+
+
+
+
 To do:
 - logging in / making account
 - sending messages
